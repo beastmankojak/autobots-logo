@@ -266,15 +266,15 @@ module CrackPoint(sm, lg, h) {
     hull() {
         hull() {
             linear_extrude(eps)
-            circle(r=sm/2, $fn=24);
+            circle(r=sm/2);
             
             translate([0, 0, h/2])
             linear_extrude(eps)
-            circle(r=lg/2, $fn=24);
+            circle(r=lg/2);
         }
         translate([0, 0, h-eps])
         linear_extrude(eps)
-        circle(r=sm/2, $fn=24);
+        circle(r=sm/2);
     }
 }
 
@@ -349,8 +349,8 @@ module AutobotCrackedBase() {
 
 module CrackInserts() {
     intersection() {
-        AutobotBase();
         AllCracks(-TOLERANCE);
+        AutobotBase();
     }
 }
 
@@ -377,12 +377,12 @@ module TestSection() {
     }
 }
 
-//AutobotLogo();
-//AutobotCrackedBase();
-//AutobotCenterBase();
-//CrackInserts();
+AutobotLogo();
+AutobotCrackedBase();
+AutobotCenterBase();
+CrackInserts();
 
-TestSection();
+//TestSection();
 
 
 /*
