@@ -7,12 +7,13 @@ PLATE_HEIGHT = 4;
 POST_HEIGHT = 10;
 POST_R = 3;
 WELL_THICKNESS = 2;
-TOLERANCE = 0.1;
+TOLERANCE = 0.05;
 MINI_HEX_R = 12.5;
 MIN_HEX_GAP = 3;
 SQRT2 = sqrt(2);
 SQRT3 = sqrt(3);
 eps = .01;
+GROOVE = 1;
 
 ALL_POSTS = [
     // Nose
@@ -41,8 +42,8 @@ ALL_POSTS = [
     
     // Forehead
     [75, 90],
-    [0, 57],
-    [0, 105]
+    [15, 60],
+    [20, 105]
 ];
 
 cracks = [
@@ -261,14 +262,52 @@ module HexWalk2(directions, tolerance, i=0) {
         
 }
 
-module Crack(startPoint, startAngle, directions, tolerance=TOLERANCE) {
-    scale([GLOBAL_SCALE, GLOBAL_SCALE, 1])
-    translate(addZ(hexPoint(startPoint.x, startPoint.y, startPoint.z), 0))
-    rotate([0, 0, startAngle])
-    linear_extrude(PLATE_HEIGHT)
-    union() {
-        HexWalk2(directions, tolerance);
+module CrackPoint(sm, lg, h) {
+    hull() {
+        hull() {
+            linear_extrude(eps)
+            circle(r=sm/2, $fn=24);
+            
+            translate([0, 0, h/2])
+            linear_extrude(eps)
+            circle(r=lg/2, $fn=24);
+        }
+        translate([0, 0, h-eps])
+        linear_extrude(eps)
+        circle(r=sm/2, $fn=24);
     }
+}
+
+module HexWalk3(directions, tolerance, i=0) {
+    gap = MIN_HEX_GAP + 2*tolerance;
+    if (i <= len(directions)) {
+        union() {
+            hull() {
+                CrackPoint(gap, gap + GROOVE, PLATE_HEIGHT);
+                
+                translate([MINI_HEX_R, 0, 0])
+                CrackPoint(gap, gap+GROOVE, PLATE_HEIGHT);
+            }
+            
+            translate([MINI_HEX_R, 0, 0])
+            rotate([0, 0, directions[i] == "L" ? 60 : -60])
+            HexWalk3(directions, tolerance, i + 1);
+        }
+    }
+}
+
+module Crack(startPoint, startAngle, directions, tolerance=TOLERANCE) {
+        scale([GLOBAL_SCALE, GLOBAL_SCALE, 1])
+        translate(addZ(hexPoint(startPoint.x, startPoint.y, startPoint.z), 0))
+        rotate([0, 0, startAngle])
+        HexWalk3(directions, tolerance);
+    /*
+        scale([GLOBAL_SCALE, GLOBAL_SCALE, 1])
+        translate(addZ(hexPoint(startPoint.x, startPoint.y, startPoint.z), 0))
+        rotate([0, 0, startAngle])
+        linear_extrude(PLATE_HEIGHT)
+        HexWalk2(directions, tolerance);
+    */
 }
 
 module AllCracks(tolerance = TOLERANCE) {
@@ -277,12 +316,34 @@ module AllCracks(tolerance = TOLERANCE) {
     }
 }
 
+module CenterBaseVolume(size) {
+    union(){
+        hull() {
+            hull() {
+            linear_extrude(eps)
+            square(size, center=true);
+
+            translate([0, 0, PLATE_HEIGHT/2])
+            linear_extrude(eps)
+            square(size + 2*GROOVE, center=true);
+            }
+            
+            translate([0, 0, PLATE_HEIGHT - eps])
+            linear_extrude(eps)
+            square(size, center=true);
+        }
+        
+        translate([0, 0, PLATE_HEIGHT-eps])
+        cube(size, center=true);
+    }
+}
+
 module AutobotCrackedBase() {
     difference() {
         AutobotBase();
         AllCracks();
         translate([0, -10, 0])
-        cube(175, center=true);
+        CenterBaseVolume(175 + 2*TOLERANCE);
     }
 }
 
@@ -300,14 +361,28 @@ module AutobotCenterBase() {
             AllCracks();
         }
         translate([0, -10, 0])
-        cube(175, center=true);
+        CenterBaseVolume(175 - 2*TOLERANCE);
     }
 }
 
-AutobotLogo();
-AutobotCrackedBase();
-AutobotCenterBase();
-CrackInserts();
+module TestSection() {
+    intersection() {
+        translate([-90, -15, 0])
+        cube([50, 100, 10], center=true);
+        union(){ 
+            AutobotCrackedBase();
+            AutobotCenterBase();
+            CrackInserts();
+        }
+    }
+}
+
+//AutobotLogo();
+//AutobotCrackedBase();
+//AutobotCenterBase();
+//CrackInserts();
+
+TestSection();
 
 
 
