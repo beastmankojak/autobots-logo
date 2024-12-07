@@ -1,0 +1,27 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  width="300mm" height="300mm" viewBox="0 0 8000 8000"
+  preserveAspectRatio="xMidYMid meet" xml:space="preserve">
+
+  <!-- Left cheek -->
+  <path fill="black"
+      d="M 1099 4083 L 3665 7686 L 1387 6696 L 1099 4083" />
+
+  <!-- Right cheek -->
+  <path fill="black"
+      d="M 6901 4083 L 6613 6696 L 4335 7686 L 6901 4083" />
+
+  <!-- Face -->
+  <path fill="black"
+    d="M 4000 7838 L 1053 3719 L 596 188 L 610 184 L 1358 1398 L 2879 1901 L 3020 2742 L 1619 2291
+          L 1620 2398 L 3057 2885 L 3145 3434 L 1649 2939 L 1651 3083 L 3204 3582 L 4000 4363
+          L 4796 3582 L 6349 3083 L 6351 2939 L 4855 3434 L 4943 2885 L 6380 2398 L 6381 2291
+          L 4980 2742 L 5121 1901 L 6642 1398 L 7390 184 L 7404 188 L 6947 3719 L 4000 7838
+       M 1855 3818 L 3298 5233 L 3687 4451 L 1855 3818
+       M 6145 3818 L 4313 4451 L 4702 5233 L 6145 3818" />
+
+  <!-- Crown -->
+  <path fill="black"
+    d="M 4000	4227 L 3327	3469 L 2823	190 L 2837	185 L 3768	1649 L 4232	1649 L 5163	185 L 5177	190 L 4673	3469 L 4000	4227
+       M 4000	3068 L 4181	2300 L 3819	2300 L 4000	3068" />
+  </svg>
