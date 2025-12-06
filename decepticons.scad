@@ -76,7 +76,9 @@ module DecepticonBase() {
 }
 
 // difference() {
-    DecepticonLogo();
+    //DecepticonLogo();
+    //DecepticonBase();
+    CenterBaseVolume(175 + 2*TOLERANCE);
     // translate([-50, -60, 16])
     // rotate(a=[0, 0, 60])
     // cube(size=[50, 4, 5], center=true);
